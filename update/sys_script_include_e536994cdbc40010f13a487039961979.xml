@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_58872_needit.getmailaddress</api_name>
+        <caller_access/>
+        <client_callable>true</client_callable>
+        <description> Script Include to return an email address. The calling client-side script passes a sys_id for a User table record.</description>
+        <name>getmailaddress</name>
+        <script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+
+	// Modified the if to return if the newValue == oldValue to avoid
+	// unecessary trips to the server
+	if (isLoading || newValue === '' || newValue == oldValue) {
+		return;
+	}
+
+	// Instantiate the GetEmailAddress Script Include 
+	var getEmailAddr = new GlideAjax('GetEmailAddress');
+	// Specify the getEmail method
+	getEmailAddr.addParam('sysparm_name','getEmail');
+	// Pass the Requested for sys_id
+	getEmailAddr.addParam('sysparm_userID', g_form.getValue('u_requested_for'));
+	// Send the request to the server
+	getEmailAddr.getXML(populateEmailField);
+
+
+	// When the response is back from the server
+	function populateEmailField(response){
+		// Extract the email address from the response, clear any value from the email field, 
+		// set new value in the email field
+		var emailFromScriptInclude = response.responseXML.documentElement.getAttribute("answer");
+		g_form.clearValue('u_requested_for_email');
+		g_form.setValue('u_requested_for_email',emailFromScriptInclude);
+	}
+}
+]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-09-17 17:18:52</sys_created_on>
+        <sys_id>e536994cdbc40010f13a487039961979</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>getmailaddress</sys_name>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sys_script_include_e536994cdbc40010f13a487039961979</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-09-17 17:18:52</sys_updated_on>
+    </sys_script_include>
+</record_update>
